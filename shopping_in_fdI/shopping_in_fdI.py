@@ -4,6 +4,12 @@ N = 100000
 
 tree = [0] * (2 * N)
 
+def min_value(value1, value2):
+    return value1 if value1 < value2 else value2
+
+def max_value(value1, value2):
+    return value1 if value1 > value2 else value2
+
 # function to build the tree
 def build(array_of_cellphone_prices, number_of_shops):
 
@@ -14,8 +20,8 @@ def build(array_of_cellphone_prices, number_of_shops):
 	# build the tree by calculating parents
     for i in range(number_of_shops - 1, 0, -1):
         
-        min_price = min(tree[i << 1][0], tree[i << 1 | 1][0])
-        max_price = max(tree[i << 1][1], tree[i << 1 | 1][1])
+        min_price = min_value(tree[i << 1][0], tree[i << 1 | 1][0])
+        max_price = max_value(tree[i << 1][1], tree[i << 1 | 1][1])
 
         tree[i] = (min_price, max_price)
 
@@ -31,16 +37,14 @@ def updateTreeNode(shop, new_price, number_of_shops) :
 	
     while i > 1 :
 
-        min_price = min(tree[i][0], tree[i ^ 1][0])
-        max_price = max(tree[i][1], tree[i ^ 1][1])
+        min_price = min_value(tree[i][0], tree[i ^ 1][0])
+        max_price = max_value(tree[i][1], tree[i ^ 1][1])
 		
         tree[i >> 1] = (min_price, max_price)
         i >>= 1
 
 # function to get sum on interval [start, end)
 def query(start, end, number_of_shops):
-
-    answer = 0;
 	
 	# loop to find the sum in the range
     start += number_of_shops
@@ -52,14 +56,14 @@ def query(start, end, number_of_shops):
     while start < end:
 	
         if (start & 1):
-            highest_price = max(highest_price, tree[start][1])
-            lowest_price = min(lowest_price, tree[start][0])
+            highest_price = max_value(highest_price, tree[start][1])
+            lowest_price = min_value(lowest_price, tree[start][0])
             start += 1
 	
         if (end & 1):
             end -= 1
-            highest_price = max(highest_price, tree[end][1])
-            lowest_price = min(lowest_price, tree[end][0])
+            highest_price = max_value(highest_price, tree[end][1])
+            lowest_price = min_value(lowest_price, tree[end][0])
             
         
         start >>= 1
