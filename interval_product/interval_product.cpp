@@ -5,6 +5,18 @@ using namespace std;
 
 #define PRODUCT 'P'
 
+int get_value(int value1, int value2){
+    if(value1 == 0 || value2 == 0)
+        return 0;
+    else if(value1 < 0 && value2 > 0)
+        return -1;
+    else if(value1 > 0 && value2 < 0)
+        return -1;
+        
+    return 1;
+}
+
+
 struct SegmentTree {  
     int product;
     int from;
@@ -23,7 +35,7 @@ SegmentTree* buildTree(vector<int>& nums, int from, int to) {
     int mid = from + (to - from) / 2;
     auto left = buildTree(nums, from, mid);
     auto right = buildTree(nums, mid + 1, to);
-    return new SegmentTree(from, to, (left->product) * (right->product), left, right);
+    return new SegmentTree(from, to, get_value(left->product, right->product), left, right);
 }
 
 int queryTree(SegmentTree* root, int from, int to) {
@@ -37,8 +49,8 @@ int queryTree(SegmentTree* root, int from, int to) {
     if (from > mid) {
         return queryTree(root->right, from, to);
     }
-    return queryTree(root->left, from, mid) *
-        queryTree(root->right, mid + 1, to);
+    return get_value(queryTree(root->left, from, mid),
+        queryTree(root->right, mid + 1, to));
 }
 
 void updateTree(SegmentTree* root, int index, int value) {
@@ -52,7 +64,7 @@ void updateTree(SegmentTree* root, int index, int value) {
     } else {
         updateTree(root->right, index, value);
     }
-    root->product = (root->left->product) * (root->right->product);
+    root->product = get_value(root->left->product, root->right->product);
 }
 
 string get_result_as_string(int result){
@@ -67,17 +79,14 @@ string get_result_as_string(int result){
 
 int main()
 {
-    int number_of_elements, number_of_rounds, element;
-    vector<int> elements;
-    SegmentTree* seg_tree;
-    int result, num_1, num_2;
-    char command;
-    string result_as_string;
+    int number_of_elements, number_of_rounds;
     
     while(cin>>number_of_elements>>number_of_rounds){
-        result_as_string = "";
-        
-        elements.clear();
+        vector<int> elements;
+        SegmentTree* seg_tree;
+        int result, num_1, num_2, element;
+        char command;
+        string result_as_string = "";
         
         for(int i = 0; i < number_of_elements; i++){
             cin>>element;
