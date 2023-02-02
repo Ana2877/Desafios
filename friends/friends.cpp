@@ -10,12 +10,11 @@ using namespace std;
 
 using namespace std;
 
-int main()
-{
+int main(){
     string current_list_of_friends;
     string new_list_of_friends;
     string current_friend;
-    string list_of_friends_with_indication = "";
+    string list_of_friends_for_indication = "";
     string name;
     bool has_indication = false;
     
@@ -33,20 +32,20 @@ int main()
     
         while(getline(ss, name, ' ')) {
             if (current_friend.compare(name) == 0){
-                list_of_friends_with_indication += new_list_of_friends + " ";
+                list_of_friends_for_indication += new_list_of_friends + " ";
                 has_indication = true;
             }
             
-            list_of_friends_with_indication += name + " ";
+            list_of_friends_for_indication += name + " ";
         }
         
         if(!has_indication){
-            list_of_friends_with_indication += new_list_of_friends;
+            list_of_friends_for_indication += new_list_of_friends;
         } else {
-            list_of_friends_with_indication.pop_back();
+            list_of_friends_for_indication.pop_back();
         }
         
-        cout << list_of_friends_with_indication << '\n';
+        cout << list_of_friends_for_indication << '\n';
     }
 
     return 0;
